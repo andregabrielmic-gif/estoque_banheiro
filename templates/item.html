@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ item[1] }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>{{ item[1] }}</h1>
+
+<a href="/editar/{{ item[0] }}" style="text-decoration: none; background: #eee; padding: 5px 10px; border-radius: 4px; border: 1px solid #ccc;">✏️ Editar Informações</a>
+
+<img src="/static/fotos/{{ item[5] }}" width="250"><br><br>
+
+<p><strong>Descrição:</strong> {{ item[2] }}</p>
+<p><strong>Armário:</strong> {{ item[3] }}</p>
+<p><strong>Quantidade atual:</strong> {{ item[4] }}</p>
+
+<hr>
+
+<h2>Movimentar Estoque</h2>
+
+<form method="POST">
+  <label>Quem realizou:</label><br>
+  <input type="text" name="quem" required><br><br>
+
+  <label>Motivo:</label><br>
+  <input type="text" name="motivo" required><br><br>
+
+  <label>Quantidade:</label><br>
+  <input type="number" name="quantidade" min="1" required><br><br>
+
+  <button type="submit" name="acao" value="retirada" style="background-color: #ff4d4d; color: white; padding: 10px;">Registrar Retirada</button>
+  <button type="submit" name="acao" value="adicao" style="background-color: #4CAF50; color: white; padding: 10px;">Registrar Adição</button>
+</form>
+
+<hr>
+
+<h2>Histórico</h2>
+
+<ul>
+  {% for h in historico %}
+    <li>
+      <strong>{{ h[3] }}</strong> – {{ h[0] }} 
+      {% if h[2] < 0 %}
+        <span style="color: red;">retirou {{ h[2]|abs }}</span>
+      {% else %}
+        <span style="color: green;">adicionou {{ h[2] }}</span>
+      {% endif %}
+      ({{ h[1] }})
+    </li>
+  {% endfor %}
+</ul>
+
+<br>
+<a href="/">⬅ Voltar</a>
+
+</body>
+</html>

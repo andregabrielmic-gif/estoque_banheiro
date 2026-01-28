@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: #1e2228; /* fundo escuro moderno */
+  margin: 0;
+  padding: 30px;
+  color: #e6e6e6;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* CENTRALIZA */
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+header img {
+  height: 65px;
+}
+
+header h1 {
+  font-size: 28px;
+  margin: 0;
+  color: #ffffff;
+}
+
+/* BOTÕES */
+.botao {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #2f81f7;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.botao:hover {
+  background-color: #1f6fe0;
+}
+
+/* BARRA SUPERIOR */
+.top-bar {
+  display: flex;
+  justify-content: center;   /* CENTRALIZA */
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+/* BUSCA */
+.busca-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.busca-container input {
+  width: 320px;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+/* CATEGORIA (DISCRETA NO CANTO) */
+.categoria-container {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+.categoria-container select {
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+}
+
+/* LISTA */
+.lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background-color: #2a2f36;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.card h2 {
+  font-size: 17px;
+  margin: 5px 0;
+  color: #ffffff;
+}
+
+.card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #cccccc;
+}
+
+.card a {
+  display: inline-block;
+  margin-top: 8px;
+  color: #2f81f7;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* TABELA (RELATÓRIO) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2a2f36;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #3a3f46;
+}
+
+th {
+  background-color: #23272e;
+}

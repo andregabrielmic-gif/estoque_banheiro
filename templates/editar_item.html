@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar {{ item[1] }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <h1>Editar Item</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <label>Nome:</label><br>
+        <input type="text" name="nome" value="{{ item[1] }}" required><br><br>
+
+        <label>Descrição:</label><br>
+        <textarea name="descricao">{{ item[2] }}</textarea><br><br>
+
+        <label>Armário:</label><br>
+        <input type="text" name="armario" value="{{ item[3] }}" required><br><br>
+
+        <label>Quantidade:</label><br>
+        <input type="number" name="quantidade" value="{{ item[4] }}" required><br><br>
+
+        <label>Categoria:</label><br>
+        <input type="text" name="categoria" value="{{ item[6] }}" required><br><br>
+
+        <p>Foto atual:</p>
+        {% if item[5] %}
+            <img src="/static/fotos/{{ item[5] }}" width="100"><br>
+        {% else %}
+            <p>Sem foto cadastrada</p>
+        {% endif %}
+
+        <label>Alterar foto (deixe vazio para manter a atual):</label><br>
+        <input type="file" name="foto" accept="image/*"><br><br>
+
+        <button type="submit" style="background-color: #2196F3; color: white; padding: 10px; border: none; cursor: pointer;">
+            Salvar Alterações
+        </button>
+
+    </form>
+
+    <br>
+    <a href="/item/{{ item[0] }}">⬅ Cancelar</a>
+
+</body>
+</html>

@@ -174,5 +174,4 @@ def relatorio():
     return render_template("relatorio.html", itens=itens)
 
 if __name__ == "__main__":
-    criar_tabelas()
-    app.run(debug=True)
+    app.run()

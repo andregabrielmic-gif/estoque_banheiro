@@ -173,8 +173,8 @@ def relatorio():
 
     return render_template("relatorio.html", itens=itens)
 
-import os
-
+# 🔑 CHAMADA OBRIGATÓRIA PARA CRIAR O BANCO NO RENDER
 if __name__ == "__main__":
+    criar_tabelas()
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)

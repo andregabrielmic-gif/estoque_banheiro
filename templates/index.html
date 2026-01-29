@@ -2,176 +2,52 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Controle de estoque arquivo </title>
+    <title>Estoque RH</title>
     <link rel="stylesheet" href="/static/style.css">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-        }
-
-        header {
-            text-align: center;
-        }
-
-        .top-bar {
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .botao {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 14px;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-right: 10px;
-        }
-
-        .busca-container {
-            text-align: center;
-            margin: 25px 0;
-        }
-
-        .busca-container input {
-            width: 320px;
-            padding: 8px;
-            font-size: 16px;
-        }
-
-        .lista {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-
-        .card h2 {
-            font-size: 18px;
-            margin: 5px 0;
-        }
-
-        .card p {
-            margin: 4px 0;
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body>
-
-<header>
-    <h1>📦 Controle de estoque arquivo</h1>
-</header>
-
-<div class="top-bar">
-    <a class="botao" href="/novo">➕ Novo Item</a>
-    <a class="botao" href="/relatorio">📄 Relatório</a>
-</div>
-
-    <div style="text-align: center; margin-bottom: 10px;">
-    <button onclick="filtrarCategoria('')">Todos</button>
-    <button onclick="filtrarCategoria('brindes')">Brindes</button>
-    <button onclick="filtrarCategoria('insumos')">Insumos</button>
-    <button onclick="filtrarCategoria('uniformes administrativo')">Uni. Adm</button>
-    <button onclick="filtrarCategoria('uniformes operacionais')">Uni. Op</button>
-    <button onclick="filtrarCategoria('epi\'s')">EPI's</button>
-</div>
-
-<div class="card" 
-     data-nome="{{ item['nome'] | lower }}" 
-     data-categoria="{{ item['categoria'] | lower }}"
-     ...>
-     ...
-     <p><strong>Categoria:</strong> {{ item['categoria'] }}</p>
-</div>
-
-<script>
-// Nova função para filtrar por botão de categoria
-function filtrarCategoria(cat) {
-    document.getElementById("busca").value = cat;
-    filtrarItens();
-}
-
-// Atualize sua função filtrarItens para incluir a categoria na busca
-function filtrarItens() {
-    const texto = document.getElementById("busca").value.toLowerCase();
-    const cards = document.querySelectorAll(".card");
-
-    cards.forEach(card => {
-        const nome = card.dataset.nome;
-        const categoria = card.dataset.categoria;
-        const encontrou = nome.includes(texto) || categoria.includes(texto);
-        card.style.display = encontrou ? "block" : "none";
-    });
-}
-</script>
-
-<!-- Pesquisa central (tempo real) -->
-<div class="busca-container">
-    <input
-        type="text"
-        id="busca"
-        placeholder="Buscar item..."
-        onkeyup="filtrarItens()"
-    >
-</div>
-
-<!-- Lista de itens -->
-<div class="lista" id="listaItens">
-    {% for item in itens %}
-    <div
-        class="card"
-        data-nome="{{ item['nome'] | lower }}"
-        data-descricao="{{ item['descricao'] | lower }}"
-        data-armario="{{ item['armario'] | lower }}"
-    >
-        {% if item['foto'] %}
-            <img src="/static/fotos/{{ item['foto'] }}">
-        {% endif %}
-
-        <h2>{{ item['nome'] }}</h2>
-        <p><strong>Armário:</strong> {{ item['armario'] }}</p>
-        <p><strong>Quantidade:</strong> {{ item['quantidade'] }}</p>
-
-        <a href="/item/{{ item['id'] }}">Ver detalhes</a>
+    <header><h1>📦 Controle de Estoque RH</h1></header>
+    
+    <div style="text-align:center; margin: 20px;">
+        <a class="botao" href="/novo">➕ Novo Item</a>
+        <a class="botao" href="/relatorio">📄 Relatório</a>
     </div>
-    {% endfor %}
-</div>
 
-<script>
-function filtrarItens() {
-    const texto = document.getElementById("busca").value.toLowerCase();
-    const cards = document.querySelectorAll(".card");
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button onclick="filtrarCat('')">Todos</button>
+        <button onclick="filtrarCat('brindes')">Brindes</button>
+        <button onclick="filtrarCat('insumos')">Insumos</button>
+        <button onclick="filtrarCat('epi')">EPI's</button>
+    </div>
 
-    cards.forEach(card => {
-        const nome = card.dataset.nome;
-        const descricao = card.dataset.descricao;
-        const armario = card.dataset.armario;
+    <div class="busca-container">
+        <input type="text" id="busca" placeholder="Buscar por nome..." onkeyup="filtrarItens()">
+    </div>
 
-        const encontrou =
-            nome.includes(texto) ||
-            descricao.includes(texto) ||
-            armario.includes(texto);
+    <div class="lista" id="listaItens">
+        {% for item in itens %}
+        <div class="card" data-nome="{{ item['nome']|lower }}" data-cat="{{ item['categoria']|lower }}">
+            {% if item['foto'] %}<img src="/static/fotos/{{ item['foto'] }}">{% endif %}
+            <h2>{{ item['nome'] }}</h2>
+            <p><strong>Categoria:</strong> {{ item['categoria'] }}</p>
+            <p><strong>Quantidade:</strong> {{ item['quantidade'] }}</p>
+            <a href="/item/{{ item['id'] }}">Ver detalhes</a>
+        </div>
+        {% endfor %}
+    </div>
 
-        card.style.display = encontrou ? "block" : "none";
-    });
-}
-</script>
-
+    <script>
+        function filtrarCat(c) {
+            document.getElementById('busca').value = c;
+            filtrarItens();
+        }
+        function filtrarItens() {
+            let t = document.getElementById('busca').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(c => {
+                let match = c.dataset.nome.includes(t) || c.dataset.cat.includes(t);
+                c.style.display = match ? 'block' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>

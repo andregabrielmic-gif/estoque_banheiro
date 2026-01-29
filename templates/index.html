@@ -83,6 +83,44 @@
     <a class="botao" href="/relatorio">📄 Relatório</a>
 </div>
 
+    <div style="text-align: center; margin-bottom: 10px;">
+    <button onclick="filtrarCategoria('')">Todos</button>
+    <button onclick="filtrarCategoria('brindes')">Brindes</button>
+    <button onclick="filtrarCategoria('insumos')">Insumos</button>
+    <button onclick="filtrarCategoria('uniformes administrativo')">Uni. Adm</button>
+    <button onclick="filtrarCategoria('uniformes operacionais')">Uni. Op</button>
+    <button onclick="filtrarCategoria('epi\'s')">EPI's</button>
+</div>
+
+<div class="card" 
+     data-nome="{{ item['nome'] | lower }}" 
+     data-categoria="{{ item['categoria'] | lower }}"
+     ...>
+     ...
+     <p><strong>Categoria:</strong> {{ item['categoria'] }}</p>
+</div>
+
+<script>
+// Nova função para filtrar por botão de categoria
+function filtrarCategoria(cat) {
+    document.getElementById("busca").value = cat;
+    filtrarItens();
+}
+
+// Atualize sua função filtrarItens para incluir a categoria na busca
+function filtrarItens() {
+    const texto = document.getElementById("busca").value.toLowerCase();
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        const nome = card.dataset.nome;
+        const categoria = card.dataset.categoria;
+        const encontrou = nome.includes(texto) || categoria.includes(texto);
+        card.style.display = encontrou ? "block" : "none";
+    });
+}
+</script>
+
 <!-- Pesquisa central (tempo real) -->
 <div class="busca-container">
     <input

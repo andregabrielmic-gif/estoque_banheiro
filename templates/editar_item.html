@@ -2,53 +2,36 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Editar {{ item[1] }}</title>
+    <title>Editar {{ item['nome'] }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-
     <h1>Editar Item</h1>
-
     <form method="POST" enctype="multipart/form-data">
-
         <label>Nome:</label><br>
-        <input type="text" name="nome" value="{{ item[1] }}" required><br><br>
-
-        <label>Descrição:</label><br>
-        <textarea name="descricao">{{ item[2] }}</textarea><br><br>
-
-        <label>Armário:</label><br>
-        <input type="text" name="armario" value="{{ item[3] }}" required><br><br>
-
-        <label>Quantidade:</label><br>
-        <input type="number" name="quantidade" value="{{ item[4] }}" required><br><br>
+        <input type="text" name="nome" value="{{ item['nome'] }}" required style="width: 100%; max-width: 400px; padding: 8px;"><br><br>
 
         <label>Categoria:</label><br>
-<select name="categoria" required>
-    {% set cats = ["Brindes", "Insumos", "Uniformes Administrativo", "Uniformes Operacionais", "EPI's"] %}
-    {% for cat in cats %}
-        <option value="{{ cat }}" {% if item['categoria'] == cat %}selected{% endif %}>{{ cat }}</option>
-    {% endfor %}
-</select><br><br>
+        <select name="categoria" required style="width: 100%; max-width: 418px; padding: 8px;">
+            {% for cat in ["Brindes", "Insumos", "Uniformes Administrativo", "Uniformes Operacionais", "EPI's"] %}
+                <option value="{{ cat }}" {% if item['categoria'] == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select><br><br>
 
-        <p>Foto atual:</p>
-        {% if item[5] %}
-            <img src="/static/fotos/{{ item[5] }}" width="100"><br>
-        {% else %}
-            <p>Sem foto cadastrada</p>
-        {% endif %}
+        <label>Descrição:</label><br>
+        <textarea name="descricao" style="width: 100%; max-width: 400px; padding: 8px;">{{ item['descricao'] }}</textarea><br><br>
 
-        <label>Alterar foto (deixe vazio para manter a atual):</label><br>
+        <label>Armário:</label><br>
+        <input type="text" name="armario" value="{{ item['armario'] }}" required style="width: 100%; max-width: 400px; padding: 8px;"><br><br>
+
+        <label>Quantidade:</label><br>
+        <input type="number" name="quantidade" value="{{ item['quantidade'] }}" required style="width: 100%; max-width: 400px; padding: 8px;"><br><br>
+
+        <label>Alterar Foto (deixe vazio para manter):</label><br>
         <input type="file" name="foto" accept="image/*"><br><br>
 
-        <button type="submit" style="background-color: #2196F3; color: white; padding: 10px; border: none; cursor: pointer;">
-            Salvar Alterações
-        </button>
-
+        <button type="submit" style="background: #2196F3; color: white; padding: 10px 20px; border: none; cursor: pointer;">Salvar Alterações</button>
     </form>
-
-    <br>
-    <a href="/item/{{ item[0] }}">⬅ Cancelar</a>
-
+    <br><a href="/item/{{ item['id'] }}">⬅ Cancelar</a>
 </body>
 </html>

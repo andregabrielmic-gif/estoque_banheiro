@@ -94,12 +94,18 @@
 
 <div class="lista" id="listaItens">
     {% for item in itens %}
-    <div class="card {% if item['quantidade'] <= 0 %}zerado{% endif %}" 
+    
+    {# Definindo a quantidade mínima com base na categoria #}
+    {% set qtd_minima = 100 if item['categoria'] == 'Brindes' else 5 %}
+    {# Verifica se precisa comprar #}
+    {% set precisa_comprar = item['quantidade'] < qtd_minima %}
+
+    <div class="card {% if precisa_comprar %}zerado{% endif %}" 
          data-nome="{{ item['nome']|lower }}" 
          data-cat="{{ item['categoria'] }}">
         
-        {% if item['quantidade'] <= 0 %}
-            <div class="alerta-compra">⚠️ COMPRAR</div>
+        {% if precisa_comprar %}
+            <div class="alerta-compra">⚠️ COMPRAR (Mín: {{ qtd_minima }})</div>
         {% endif %}
 
         {% if item['foto'] %}
@@ -109,13 +115,11 @@
         <h2>{{ item['nome'] }}</h2>
         <p><span style="color: #888;">Categoria:</span> {{ item['categoria'] }}</p>
         <p><span style="color: #888;">Qtd:</span> 
-            <strong style="color: {% if item['quantidade'] <= 0 %}#ff4d4d{% else %}#4CAF50{% endif %};">
+            <strong style="color: {% if precisa_comprar %}#ff4d4d{% else %}#4CAF50{% endif %};">
                 {{ item['quantidade'] }}
             </strong>
         </p>
-        <a href="/item/{{ item['id'] }}" style="color: #2196F3; text-decoration: none; font-weight: bold;">
-    Ver detalhes / Movimentar
-</a>
+        <a href="/item/{{ item['id'] }}">Ver detalhes / Movimentar</a>
     </div>
     {% endfor %}
 </div>

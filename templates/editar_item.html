@@ -24,7 +24,12 @@
         <input type="number" name="quantidade" value="{{ item[4] }}" required><br><br>
 
         <label>Categoria:</label><br>
-        <input type="text" name="categoria" value="{{ item[6] }}" required><br><br>
+<select name="categoria" required>
+    {% set cats = ["Brindes", "Insumos", "Uniformes Administrativo", "Uniformes Operacionais", "EPI's"] %}
+    {% for cat in cats %}
+        <option value="{{ cat }}" {% if item['categoria'] == cat %}selected{% endif %}>{{ cat }}</option>
+    {% endfor %}
+</select><br><br>
 
         <p>Foto atual:</p>
         {% if item[5] %}

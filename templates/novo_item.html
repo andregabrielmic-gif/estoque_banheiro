@@ -2,127 +2,39 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Novo Item - Controle de Estoque</title>
+    <title>Novo Item</title>
     <link rel="stylesheet" href="/static/style.css">
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 40px;
-            line-height: 1.6;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-        }
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            max-width: 400px;
-            padding: 8px;
-            margin-top: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .voltar {
-            text-decoration: none;
-            color: #666;
-            display: inline-block;
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
+    <h1>Cadastrar Novo Item</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Nome:</label><br>
+        <input type="text" name="nome" required style="width: 100%; max-width: 400px; padding: 8px;"><br><br>
 
-<h1>Cadastrar Novo Item</h1>
+        <label>Descrição:</label><br>
+        <textarea name="descricao" style="width: 100%; max-width: 400px; padding: 8px;"></textarea><br><br>
 
-<form method="POST" action="/novo" enctype="multipart/form-data">
+        <label>Categoria:</label><br>
+        <select name="categoria" required style="width: 100%; max-width: 418px; padding: 8px;">
+            <option value="">Selecione...</option>
+            <option value="Brindes">Brindes</option>
+            <option value="Insumos">Insumos</option>
+            <option value="Uniformes Administrativo">Uniformes Administrativo</option>
+            <option value="Uniformes Operacionais">Uniformes Operacionais</option>
+            <option value="EPI's">EPI's</option>
+        </select><br><br>
 
-    <div class="form-group">
-        <label for="nome">Nome do Item:</label>
-        <input
-            type="text"
-            id="nome"
-            name="nome"
-            placeholder="Ex: Correia Dentada"
-            required
-        >
-    </div>
+        <label>Armário:</label><br>
+        <input type="text" name="armario" required style="width: 100%; max-width: 400px; padding: 8px;"><br><br>
 
-    <div class="form-group">
-        <label for="descricao">Descrição / Detalhes:</label>
-        <textarea
-            id="descricao"
-            name="descricao"
-            rows="3"
-            placeholder="Ex: Marca X, modelo Y"
-        ></textarea>
-    </div>
+        <label>Quantidade Inicial:</label><br>
+        <input type="number" name="quantidade" value="0" required style="width: 100%; max-width: 400px; padding: 8px;"><br><br>
 
-    <div class="form-group">
-    <label for="categoria">Categoria:</label>
-    <select id="categoria" name="categoria" required>
-        <option value="">Selecione</option>
-        <option value="Brindes">Brindes</option>
-        <option value="Insumos">Insumos</option>
-        <option value="Uniformes Administrativo">Uniformes Administrativo</option>
-        <option value="Uniformes Operacionais">Uniformes Operacionais</option>
-        <option value="EPI's">EPI's</option>
-    </select>
-</div>
+        <label>Foto:</label><br>
+        <input type="file" name="foto" accept="image/*" required><br><br>
 
-    <div class="form-group">
-        <label for="armario">Localização (Armário / Prateleira):</label>
-        <input
-            type="text"
-            id="armario"
-            name="armario"
-            placeholder="Ex: Armário 1"
-            required
-        >
-    </div>
-
-    <div class="form-group">
-        <label for="quantidade">Quantidade Inicial:</label>
-        <input
-            type="number"
-            id="quantidade"
-            name="quantidade"
-            min="0"
-            value="0"
-            required
-        >
-    </div>
-
-    <div class="form-group">
-        <label for="foto">Foto do Item:</label>
-        <input
-            type="file"
-            id="foto"
-            name="foto"
-            accept="image/*"
-            required
-        >
-    </div>
-
-    <button type="submit">💾 Salvar no Estoque</button>
-</form>
-
-<a href="/" class="voltar">⬅ Voltar para a lista</a>
-
+        <button type="submit" style="background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Salvar Item</button>
+    </form>
+    <br><a href="/">⬅ Voltar</a>
 </body>
 </html>

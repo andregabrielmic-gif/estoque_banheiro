@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
-import sqlite3
 import os
+import sqlite3
 from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/fotos'
 
+# Garante que a pasta de fotos exista
 if not os.path.isdir(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
@@ -18,7 +19,7 @@ def conectar():
 def criar_tabelas():
     con = conectar()
     cur = con.cursor()
-    # Adicionada a coluna 'categoria' na criação da tabela
+    # Criando tabela com a coluna categoria
     cur.execute("""
         CREATE TABLE IF NOT EXISTS itens (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,7 +58,7 @@ def novo_item():
         descricao = request.form["descricao"]
         armario = request.form["armario"]
         quantidade = int(request.form["quantidade"])
-        categoria = request.form["categoria"] # Captura a categoria
+        categoria = request.form["categoria"]
         foto = request.files.get("foto")
 
         nome_foto = None
@@ -80,6 +81,7 @@ def novo_item():
 def item(id):
     con = conectar()
     cur = con.cursor()
+    
     if request.method == "POST":
         acao = request.form.get("acao")
         qtd_input = request.form.get("quantidade")
@@ -87,6 +89,7 @@ def item(id):
             qtd = int(qtd_input)
             quem = request.form.get("quem", "Sistema")
             motivo = request.form.get("motivo", acao)
+            
             if acao == "retirada":
                 cur.execute("UPDATE itens SET quantidade = quantidade - ? WHERE id = ?", (qtd, id))
                 cur.execute("INSERT INTO followup (item_id, quem, motivo, quantidade, data) VALUES (?, ?, ?, ?, ?)",
@@ -107,12 +110,13 @@ def item(id):
 def editar_item(id):
     con = conectar()
     cur = con.cursor()
+    
     if request.method == "POST":
         nome = request.form["nome"]
         descricao = request.form["descricao"]
         armario = request.form["armario"]
         quantidade = int(request.form["quantidade"])
-        categoria = request.form["categoria"] # Captura a categoria na edição
+        categoria = request.form["categoria"]
         foto = request.files.get("foto")
 
         if foto and foto.filename != "":
@@ -127,6 +131,7 @@ def editar_item(id):
                 UPDATE itens SET nome=?, descricao=?, armario=?, quantidade=?, categoria=?
                 WHERE id=?
             """, (nome, descricao, armario, quantidade, categoria, id))
+        
         con.commit()
         con.close()
         return redirect(url_for("item", id=id))
@@ -142,9 +147,8 @@ def relatorio():
     con.close()
     return render_template("relatorio.html", itens=itens)
 
-# 🔑 CHAMADA OBRIGATÓRIA PARA CRIAR O BANCO E DEFINIR A PORTA NO RENDER
 if __name__ == "__main__":
     criar_tabelas()
-    port = int(os.environ.get("PORT", 5000)) 
-    # É fundamental usar o host="0.0.0.0" para o Render conseguir acessar
+    # Configuração crítica para o Render
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)

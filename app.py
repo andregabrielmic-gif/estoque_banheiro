@@ -142,6 +142,9 @@ def relatorio():
     con.close()
     return render_template("relatorio.html", itens=itens)
 
+# 🔑 CHAMADA OBRIGATÓRIA PARA CRIAR O BANCO E DEFINIR A PORTA NO RENDER
 if __name__ == "__main__":
     criar_tabelas()
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000)) 
+    # É fundamental usar o host="0.0.0.0" para o Render conseguir acessar
+    app.run(host="0.0.0.0", port=port)

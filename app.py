@@ -7,11 +7,11 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/fotos'
 
+# Garante que a pasta de fotos exista
 if not os.path.isdir(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 def conectar():
-    # Caminho absoluto ajuda a evitar erros de permissão no Render
     base_dir = os.path.abspath(os.path.dirname(__file__))
     db_path = os.path.join(base_dir, "estoque.db")
     con = sqlite3.connect(db_path)
@@ -80,8 +80,34 @@ def novo_item():
         return redirect(url_for("index"))
     return render_template("novo_item.html")
 
-# As outras rotas (item, editar, relatorio) seguem a mesma lógica anterior...
-# Certifique-se de que a rota /editar também salve a 'categoria'
+@app.route("/item/<int:id>", methods=["GET", "POST"])
+def item(id):
+    con = conectar()
+    cur = con.cursor()
+    
+    if request.method == "POST":
+        acao = request.form.get("acao")
+        qtd_input = request.form.get("quantidade")
+        if acao and qtd_input:
+            qtd = int(qtd_input)
+            quem = request.form.get("quem", "Sistema")
+            motivo = request.form.get("motivo", acao)
+            
+            if acao == "retirada":
+                cur.execute("UPDATE itens SET quantidade = quantidade - ? WHERE id = ?", (qtd, id))
+                cur.execute("INSERT INTO followup (item_id, quem, motivo, quantidade, data) VALUES (?, ?, ?, ?, ?)",
+                            (id, quem, motivo, -qtd, datetime.now().strftime("%d/%m/%Y %H:%M")))
+            elif acao == "adicao":
+                cur.execute("UPDATE itens SET quantidade = quantidade + ? WHERE id = ?", (qtd, id))
+                cur.execute("INSERT INTO followup (item_id, quem, motivo, quantidade, data) VALUES (?, ?, ?, ?, ?)",
+                            (id, quem, motivo, qtd, datetime.now().strftime("%d/%m/%Y %H:%M")))
+            con.commit()
+            return redirect(url_for("item", id=id))
+
+    item = cur.execute("SELECT * FROM itens WHERE id = ?", (id,)).fetchone()
+    historico = cur.execute("SELECT quem, motivo, quantidade, data FROM followup WHERE item_id = ? ORDER BY id DESC", (id,)).fetchall()
+    con.close()
+    return render_template("item.html", item=item, historico=historico)
 
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_item(id):
@@ -115,7 +141,14 @@ def editar_item(id):
     con.close()
     return render_template("editar_item.html", item=item)
 
+@app.route("/relatorio")
+def relatorio():
+    con = conectar()
+    itens = con.execute("SELECT nome, armario, quantidade, categoria FROM itens ORDER BY nome").fetchall()
+    con.close()
+    return render_template("relatorio.html", itens=itens)
+
 if __name__ == "__main__":
     criar_tabelas()
-    port = int(os.environ.get("PORT", 10000)) # Render costuma usar 10000 por padrão
+    port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)

@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from datetime import datetime, timedelta
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
@@ -93,14 +94,19 @@ def item(id):
             quem = request.form.get("quem", "Sistema")
             motivo = request.form.get("motivo", acao)
             
+            # CRIAMOS A HORA AJUSTADA AQUI
+            hora_ajustada = (datetime.now() - timedelta(hours=3)).strftime("%d/%m/%Y %H:%M")
+            
             if acao == "retirada":
                 cur.execute("UPDATE itens SET quantidade = quantidade - ? WHERE id = ?", (qtd, id))
+                # USAMOS A hora_ajustada NO INSERT
                 cur.execute("INSERT INTO followup (item_id, quem, motivo, quantidade, data) VALUES (?, ?, ?, ?, ?)",
-                            (id, quem, motivo, -qtd, datetime.now().strftime("%d/%m/%Y %H:%M")))
+                            (id, quem, motivo, -qtd, hora_ajustada))
             elif acao == "adicao":
                 cur.execute("UPDATE itens SET quantidade = quantidade + ? WHERE id = ?", (qtd, id))
+                # USAMOS A hora_ajustada NO INSERT
                 cur.execute("INSERT INTO followup (item_id, quem, motivo, quantidade, data) VALUES (?, ?, ?, ?, ?)",
-                            (id, quem, motivo, qtd, datetime.now().strftime("%d/%m/%Y %H:%M")))
+                            (id, quem, motivo, qtd, hora_ajustada))
             con.commit()
             return redirect(url_for("item", id=id))
 
